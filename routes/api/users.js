@@ -4,6 +4,10 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
+const passport = require("passport");
+
+//Load Input Validation
+const validateRegisterInput = require("../../validation/register");
 
 //Load User Model
 const User = require("../../models/User");
@@ -19,7 +23,10 @@ router.get("/test", (req, res) => res.json({ message: "Users works" }));
 //access   public
 
 router.post("/register", (req, res) => {
-  //first check is user already exits
+  const { errors, isValid } = validateRegisterInput(req.body);
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       console.log(req);
@@ -96,5 +103,21 @@ router.post("/login", (req, res) => {
     });
   });
 });
+
+//route     GET api/users/current
+//desc      return current user
+//access    Private
+
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email
+    }); //this object is used instead of just req.user in order that the password not be sent as part of the token
+  }
+);
 
 module.exports = router;
