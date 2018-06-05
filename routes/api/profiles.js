@@ -15,9 +15,9 @@ const User = require("../../models/User");
 //@access public route
 router.get("/test", (req, res) => res.json({ message: "Profile works" }));
 
-//@route GET request to api/profile
-//@description Get curren users profile
-//@access private route
+//@route GET api/profile
+//@description Get current users profile
+//@access Private
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
@@ -36,10 +36,9 @@ router.get(
   }
 );
 
-//@route POST request to api/profile
+//@route POST api/profile
 //@description Creates user profile
-//@access private route
-
+//@access Private
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
@@ -64,7 +63,7 @@ router.post(
       profileFields.githubusername = req.body.githubusername;
     //skils = Split into an array
     if (typeof req.body.skills !== "undefined") {
-      profileFields.skills = req.body.skills.spilt(",");
+      profileFields.skills = req.body.skills.split(",");
     }
 
     //Social
@@ -78,7 +77,7 @@ router.post(
 
     Profile.findOne({ user: req.body.id }).then(profile => {
       if (profile) {
-        //Then is is an update
+        //Update
         Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
@@ -86,15 +85,15 @@ router.post(
         ).then(profile => res.json(profile));
       } else {
         //Create
+        //Check if handle exits
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
           if (profile) {
             errors.handle = "That handle already exists";
             res.status(400), json(errors);
           }
-
+          //Save Profile
           new Profile(profileFields).save().then(profile => res.json(profile));
         });
-        //Check if handle exits
       }
     });
   }

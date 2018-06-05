@@ -3,7 +3,6 @@ const isEmpty = require("./is-empty");
 
 module.exports = function validateProfileInput(data) {
   let errors = {};
-
   //if field is left empty this will at least convert it to an empty string
   data.handle = !isEmpty(data.handle) ? data.handle : "";
   data.status = !isEmpty(data.status) ? data.status : "";
