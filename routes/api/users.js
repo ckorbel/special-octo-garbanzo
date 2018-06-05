@@ -17,7 +17,7 @@ const User = require("../../models/User");
 //@route GET request to api/post/test
 //@description Tests post route
 //@access public route
-router.get("/test", (req, res) => res.json({ message: "Users works" }));
+router.post("/test", (req, res) => res.json({ message: "Users works" }));
 
 //route    GET api/users/register
 //desc     Register user
@@ -78,7 +78,6 @@ router.post("/login", (req, res) => {
 
   //find the user by email
   User.findOne({ email }).then(user => {
-    //check for user
     if (!user) {
       errors.email = "User not found";
       return res.status(404).json(errors);
@@ -88,7 +87,6 @@ router.post("/login", (req, res) => {
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         //User Matched
-
         const payload = {
           id: user.id,
           name: user.name,
