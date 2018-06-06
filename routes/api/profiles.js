@@ -75,7 +75,7 @@ router.post(
     if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
     if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
 
-    Profile.findOne({ user: req.body.id }).then(profile => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
       console.log("hit test");
       if (profile) {
         //Update
