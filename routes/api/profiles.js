@@ -76,10 +76,10 @@ router.post(
     if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
 
     Profile.findOne({ user: req.body.id }).then(profile => {
-      console.log(req.body.id);
-      console.log();
+      console.log("hit test");
       if (profile) {
         //Update
+        console.log(profile);
         Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
