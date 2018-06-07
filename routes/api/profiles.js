@@ -76,10 +76,8 @@ router.post(
     if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
 
     Profile.findOne({ user: req.user.id }).then(profile => {
-      console.log("hit test");
       if (profile) {
         //Update
-        console.log(profile);
         Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
@@ -91,7 +89,7 @@ router.post(
         //Check if handle exists
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
           if (profile) {
-            console.log(profileFields);
+            console.log("hit update profile");
             errors.handle = "That handle already exists";
             res.status(400).json(errors);
           }
