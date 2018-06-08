@@ -88,4 +88,117 @@ router.delete(
   }
 );
 
+//@route        POST  api/posts/like/:id  id s the post id
+//@description  Like Post
+//@access       private
+
+router.post(
+  "/like/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          if (
+            post.likes.filter(like => like.user.toString() === req.user.id)
+              .length > 0
+          ) {
+            return res
+              .status(400)
+              .json({ alreadyliked: "User already liked this post" });
+          }
+
+          //Add user id to the likes array
+
+          post.likes.unshift({ user: req.user.id });
+
+          post.save().then(post => res.json(post));
+        })
+        .catch(err => res.status(404).json({ postnotfound: "Post not found" }));
+    });
+  }
+);
+
+//@route        POST  api/posts/unlike/:id  id s the post id
+//@description  Unlike Post
+//@access       private
+
+router.post(
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          if (
+            post.likes.filter(like => like.user.toString() === req.user.id)
+              .length === 0
+          ) {
+            return res
+              .status(400)
+              .json({ notliked: "You have not yet liked this post" });
+          }
+          //Get remove index
+          const removeIndex = post.likes
+            .map(item => item.user.toString())
+            .indexOf(req.user.id);
+
+          //Splice out of array
+          post.likes.splice(removeIndex, 1);
+
+          post.save().then(post => res.json(post));
+        })
+        .catch(err => res.status(404).json({ error: "Post not found2" }));
+    });
+  }
+);
+
+//@route        POST  api/posts/comment/:id  id s the post id
+//@description  Add a comment
+//@access       private
+
+router.post(
+  "/comment/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
+    Post.findById(req.params.id)
+      .then(post => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        };
+
+        //Add to comments array
+        post.comments.unshift(newComment);
+
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ postnotfound: "No post found" }));
+  }
+);
+
+//@route        DELETE  api/posts/comment/:id  id s the post id
+//@description  Delete a comment
+//@access       private
+
+// router.delete(
+//   "/comment/:id",
+//   passport.authenticate("jwt", { session: false }),
+//   (req, res) => {
+//     Post.findById(req.params.id)
+//       .then()
+//       .catch(err =>
+//         res.status(404).json({ commenttnotfound: "No comment was found" })
+//       );
+//   }
+// );
+
 module.exports = router;
