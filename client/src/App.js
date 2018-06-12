@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider } from "react-redux"; //provider allows us to provide the store to the components that need access to it
 import store from "./store";
+import setAuthToken from "./utils/setAuthToken";
+import jwt_decode from "jwt-decode";
+import { setCurrentUser } from "./actions/authActions";
 
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
@@ -10,6 +13,13 @@ import Landing from "./components/layout/Landing";
 import Navbar from "./components/layout/Navbar";
 
 import "./App.css";
+
+//ensures that a page refresh doesn't get rid of user authorization
+if (localStorage.jwtToken) {
+  setAuthToken(localStorage.jwtToken);
+  const decoded = jwt_decode(localStorage.jwtToken);
+  store.dispatch(setCurrentUser(decoded));
+}
 
 class App extends Component {
   render() {
