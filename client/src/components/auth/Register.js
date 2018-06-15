@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom"; //in order to route within a redux actions outside a component
-import classnames from "classnames";
 import { connect } from "react-redux"; //connect redux to this component "containers" are often compotent with redux access
 import { registerUser } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
