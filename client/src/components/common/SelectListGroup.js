@@ -11,7 +11,6 @@ const SelectListGroup = ({ name, value, error, info, onChange, options }) => {
   return (
     <div className="form-group">
       <select
-        type={type}
         className={classnames("form-control form-control-lg", {
           "is-invalid": error
         })}
