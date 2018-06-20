@@ -3,7 +3,6 @@ const isEmpty = require("./is-empty");
 
 module.exports = function validateEducationInput(data) {
   let errors = {};
-
   //if field is left empty this will at least convert it to an empty string
   data.school = !isEmpty(data.school) ? data.school : "";
   data.degree = !isEmpty(data.degree) ? data.degree : "";
