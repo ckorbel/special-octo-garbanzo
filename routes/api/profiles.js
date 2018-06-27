@@ -154,7 +154,6 @@ router.post(
         //Check if handle exists
         Profile.findOne({ handle: profileFields.handle }).then(profile => {
           if (profile) {
-            console.log("hit update profile");
             errors.handle = "That handle already exists";
             res.status(400).json(errors);
           }

@@ -18,7 +18,6 @@ router.get("/test", (req, res) => res.json({ message: "Posts works" }));
 //@route GET api/posts
 //@description Get posts
 //@access Public
-
 router.get("/", (req, res) => {
   Post.find()
     .sort({ date: -1 })
@@ -29,7 +28,6 @@ router.get("/", (req, res) => {
 //@route GET api/posts/:id
 //@description Get posts by id
 //@access Public
-
 router.get("/:id", (req, res) => {
   Post.findById(req.params.id)
     .then(post => res.json(post))
@@ -65,7 +63,6 @@ router.post(
 //@route        DELETE  api/posts/:id
 //@description  Delete Post
 //@access       private
-
 router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
@@ -91,7 +88,6 @@ router.delete(
 //@route        POST  api/posts/like/:id  id s the post id
 //@description  Like Post
 //@access       private
-
 router.post(
   "/like/:id",
   passport.authenticate("jwt", { session: false }),
@@ -122,7 +118,6 @@ router.post(
 //@route        POST  api/posts/unlike/:id  id s the post id
 //@description  Unlike Post
 //@access       private
-
 router.post(
   "/unlike/:id",
   passport.authenticate("jwt", { session: false }),
@@ -156,7 +151,6 @@ router.post(
 //@route        POST  api/posts/comment/:id  id s the post id
 //@description  Add a comment
 //@access       private
-
 router.post(
   "/comment/:id",
   passport.authenticate("jwt", { session: false }),
@@ -188,7 +182,6 @@ router.post(
 //@route        DELETE  api/posts/comment/:id/:comment_id
 //@description  Remove comment from post
 //@access       private
-
 router.delete(
   "/comment/:id/:comment_id",
   passport.authenticate("jwt", { session: false }),
