@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   GET_PROFILE,
+  GET_PROFILES,
   GET_ERRORS,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
@@ -111,6 +112,25 @@ export const deleteEducation = id => dispatch => {
       })
     );
 };
+
+//get all profiles 
+export const getProfiles = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get('/api/profile/all').then(res => {
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data
+      })
+    }).catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: null
+      })
+    });
+}
+
+
 
 //use dispatch because we're making axios request
 export const deleteAccount = () => dispatch => {
